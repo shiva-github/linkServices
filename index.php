@@ -18,7 +18,7 @@ if(isset($headers["codetype"]) == "" || isset($headers["type"]) != "url-x" ){
 			$db->getAllDocs();
 			break;
 			case 'form-data':
-			$db->insert_data_form();
+			$db->insert_data_form($_POST['name'],$_POST['link'],$_POST['description'],$_POST['type']);
 			break;
 			case 'upload-form':
 			$db->insert_uploaded_doc();

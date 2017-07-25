@@ -14,8 +14,26 @@ class dbmodule{
 		$this->database = DATABASE;
 	}
 
-	function insert(){
-		// for insert data
+	function insert_data_form($name,$link,$description,$type){
+		
+		switch ($type) {
+			case 'Add to documents table.':
+				$sql = "INSERT INTO `table1`( `name1`, `link`, `description`) VALUES ('$name','$link','$description');";
+				echo $sql;
+			break;
+
+			case 'Add to links table.':
+				$sql = "INSERT INTO `table2`( `name1`, `link`, `description`) VALUES ('$name','$link','$description');";
+				echo $sql;
+			break;
+			default:
+				echo "Try on others not on me.";
+			break;
+		}
+
+		return;
+		$this->connect();
+		// for insert data 
 		$sql = "SELECT id, name1, link, description from table1";
     // use exec() because no results are returned
 		$result = $this->conn->exec($sql);
@@ -34,9 +52,6 @@ class dbmodule{
 		// }
 		// echo gettype($final);
 		$ab = json_decode($final);
-		
-
-
 		$newArr = array();
 		foreach($ab as $key => $value) {
 			if($key == "name1"){
