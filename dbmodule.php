@@ -23,25 +23,24 @@ class dbmodule{
 		switch ($type) {
 			case 'Add to documents table.':
 				$sql = "INSERT INTO `$this->linksTable`( `name1`, `link`, `description`) VALUES ('$name','$link','$description');";
-				echo $sql;
 			break;
 
 			case 'Add to links table.':
 				$sql = "INSERT INTO `table2`( `name1`, `link`, `description`) VALUES ('$name','$link','$description');";
-				echo $sql;
 			break;
 			default:
 				echo "Try on others not on me.";
 			break;
 		}
 
-		return;
 		$this->connect();
 		// for insert data 
-		$sql = "SELECT id, name1, link, description from $this->linksTable";
-    // use exec() because no results are returned
+		// $sql = "SELECT id, name1, link, description from $this->linksTable";
+	    // use exec() because no results are returned
 		$result = $this->conn->exec($sql);
-		var_dump($result);
+		// var_dump($this->conn->execute());
+		// echo $this->conn->execute();
+		// var_dump($result);
 		$this->disconnect();
 
 	}
@@ -56,32 +55,29 @@ class dbmodule{
 		// }
 		// echo gettype($final);
 		$ab = json_decode($final);
+		var_dump($ab);
 		$newArr = array();
-		foreach($ab as $key => $value) {
-			if($key == "name1"){
-				echo $key;
-				die();
-				$newArr[ $final[ 'nameValue' ] ] = $value;
-			}
-			else{
-				$newArr[ $final[ $key ] ] = $value;
-			}
-		}
+		// foreach($ab as $key => $value) {
+		// 	if($key == "name1"){
+		// 		echo $key;
+		// 		$newArr[ $final[ 'nameValue' ] ] = $value;
+		// 	}
+		// 	else{
+		// 		$newArr[ $final[ $key ] ] = $value;
+		// 	}
+		// }
 
-		echo json_encode($newArr);
-		return;
-
+		// echo json_encode($newArr);
+		// return;
 
 
-
-
-		for($i=0;$i<count($ab);$i++){
-			var_dump( $ab[$i] ) ;
-			// $ab[$i]["name"] = $ab[$i]["name1"];
-			// unset($ab[$i]["name1"]);
-			var_dump( $ab[$i] ) ;			
-			break;
-		}
+		// for($i=0;$i<count($ab);$i++){
+		// 	var_dump( $ab[$i] ) ;
+		// 	// $ab[$i]["name"] = $ab[$i]["name1"];
+		// 	// unset($ab[$i]["name1"]);
+		// 	var_dump( $ab[$i] ) ;			
+		// 	break;
+		// }
 		$this->disconnect();
 	}
 	function getAllDocs(){

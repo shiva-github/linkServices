@@ -18,17 +18,22 @@ if(isset($headers["codetype"]) == "" || isset($headers["type"]) != "url-x" ){
 			$db->getAllDocs();
 			break;
 			case 'form-data':
-			$db->insert_data_form($_POST['name'],$_POST['link'],$_POST['description'],$_POST['type']);
+			if( isset($_POST['name']) && isset($_POST['link']) && isset($_POST['description']) && isset($_POST['type']) ){
+				$db->insert_data_form($_POST['name'],$_POST['link'],$_POST['description'],$_POST['type']);	
+			}else{
+				echo "Not sure how do you get here but You need to leave now.";
+			}
+			
 			break;
 			case 'upload-form':
 			$db->insert_uploaded_doc();
 			break;
 			default:
-			echo "trying to be very smart. cheeting huh.........";
+			echo "trying to be very smart. cheat'in huh.........";
 			break;
 		}
 	}else{
-		echo "trying to be very smart. cheeting huh.........";
+		echo "trying to be very smart. cheat'in huh.........";
 	}
 }
 
