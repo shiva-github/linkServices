@@ -5,20 +5,24 @@ class dbmodule{
 	var $username;
 	var $password;
 	var $database;
+	var $linksTable;
+	var $docsTable;
 	var $conn;
 	function __construct(){
 
-		$this->hostname = HOSTNAME;
-		$this->username = USERNAME;
-		$this->password = PASSWORD;
-		$this->database = DATABASE;
+		$this->hostname   = HOSTNAME;
+		$this->username   = USERNAME;
+		$this->password   = PASSWORD;
+		$this->database   = DATABASE;
+		$this->linksTable = LINKS_TABLE;
+		$this->docsTable  = DOCS_TABLE;
 	}
 
 	function insert_data_form($name,$link,$description,$type){
 		
 		switch ($type) {
 			case 'Add to documents table.':
-				$sql = "INSERT INTO `table1`( `name1`, `link`, `description`) VALUES ('$name','$link','$description');";
+				$sql = "INSERT INTO `$this->linksTable`( `name1`, `link`, `description`) VALUES ('$name','$link','$description');";
 				echo $sql;
 			break;
 
@@ -34,7 +38,7 @@ class dbmodule{
 		return;
 		$this->connect();
 		// for insert data 
-		$sql = "SELECT id, name1, link, description from table1";
+		$sql = "SELECT id, name1, link, description from $this->linksTable";
     // use exec() because no results are returned
 		$result = $this->conn->exec($sql);
 		var_dump($result);
@@ -44,7 +48,7 @@ class dbmodule{
 
 	function getAllLinks(){
 		$this->connect();
-		$sql = "SELECT id, name1, link, description from table1";
+		$sql = "SELECT id, name1, link, description from $this->linksTable";
 		$result = $this->conn->query($sql);
 		$final = json_encode($result->fetchAll(PDO::FETCH_ASSOC));
 		// if ($result->num_rows > 0) {
