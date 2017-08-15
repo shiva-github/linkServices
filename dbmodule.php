@@ -19,69 +19,59 @@ class dbmodule{
 	}
 
 	function insert_data_form($name,$link,$description,$type){
-		
+		$contentAdded["type"] = "No record.";
 		switch ($type) {
-			case 'Add to documents table.':
-				$sql = "INSERT INTO `$this->linksTable`( `name1`, `link`, `description`) VALUES ('$name','$link','$description');";
+			case 'Add to links table.':
+			$sql = "INSERT INTO `$this->linksTable`( `name`, `link`, `description`) VALUES ('$name','$link','$description');";
+			$contentAdded["type"] = "New Link Added";
 			break;
 
-			case 'Add to links table.':
-				$sql = "INSERT INTO `table2`( `name1`, `link`, `description`) VALUES ('$name','$link','$description');";
+			case 'Add to documents table.':
+			$sql = "INSERT INTO `$this->docsTable`( `name`, `link`, `description`) VALUES ('$name','$link','$description');";
+			$contentAdded["type"] = "New Document Added";
 			break;
 			default:
-				echo "Try on others not on me.";
+			echo "Try on others not on me.";
 			break;
 		}
 
 		$this->connect();
-		// for insert data 
-		// $sql = "SELECT id, name1, link, description from $this->linksTable";
 	    // use exec() because no results are returned
 		$result = $this->conn->exec($sql);
-		// var_dump($this->conn->execute());
-		// echo $this->conn->execute();
-		// var_dump($result);
+		echo json_encode($contentAdded);
 		$this->disconnect();
 
 	}
 
 	function getAllLinks(){
 		$this->connect();
-		$sql = "SELECT id, name1, link, description from $this->linksTable";
+		$sql = "SELECT `id`, `name`, `link`, `description`,`vote`,`time` from $this->linksTable";
 		$result = $this->conn->query($sql);
 		$final = json_encode($result->fetchAll(PDO::FETCH_ASSOC));
-		// if ($result->num_rows > 0) {
-			// echo $final;
-		// }
-		// echo gettype($final);
-		$ab = json_decode($final);
-		var_dump($ab);
-		$newArr = array();
-		// foreach($ab as $key => $value) {
-		// 	if($key == "name1"){
-		// 		echo $key;
-		// 		$newArr[ $final[ 'nameValue' ] ] = $value;
-		// 	}
-		// 	else{
-		// 		$newArr[ $final[ $key ] ] = $value;
-		// 	}
-		// }
-
-		// echo json_encode($newArr);
-		// return;
-
-
-		// for($i=0;$i<count($ab);$i++){
-		// 	var_dump( $ab[$i] ) ;
-		// 	// $ab[$i]["name"] = $ab[$i]["name1"];
-		// 	// unset($ab[$i]["name1"]);
-		// 	var_dump( $ab[$i] ) ;			
-		// 	break;
-		// }
+		$ab = json_encode($final);
+		echo $ab;
 		$this->disconnect();
 	}
 	function getAllDocs(){
 		echo "docs";
+	}
+
+	//total count of the links record
+	function totalLinksCount(){
+		$this->connect();
+		$sql = "SELECT count(id) as count from $this->linksTable";
+		$result = $this->conn->query($sql);
+		echo json_encode($result->fetchAll(PDO::FETCH_ASSOC));
+		$this->disconnect();
+	}
+	//total count of the links record end
+	function updatevote($vote,$id){
+		$sql = "Update $this->linksTable SET `vote`=$vote where id=$id";
+		$this->connect();
+		$result = $this->conn->exec($sql);
+		$res['data'] = "$result";
+		echo json_encode($res);
+		$this->disconnect();
 	}
 
 	// default functions
