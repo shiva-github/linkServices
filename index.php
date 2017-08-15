@@ -1,29 +1,70 @@
 <?php
+// header('Access-Control-Allow-Origin: *');
+// header('Access-Control-Allow-Headers: Origin, Content-type, X-Auth-Token, Authorization');  
+// header("Content-Type: application/json");
 require_once "dbmodule.php";
-	// $headers = get_headers();
-	// var_dump($headers);
+
+// $headers = getallheaders();
+// // var_dump($headers);
+// // var_dump($_REQUEST);
+// var_dump($_POST['json']);
+// // $ab = (array) json_decode($_REQUEST);
+// // var_dump($ab);
+// echo json_encode('{"ab":"cd"}');
+// // return;
+// // echo json_encode($ab);
+// return;
+
+
+
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Headers: Origin, Content-type, X-Auth-Token, Authorization');  
+header("Content-Type: application/json");
+// header("Content-Type: application/x-www-form-urlencoded; charset=UTF-8");
+
+
+$pstData = (array) json_decode($_POST["json"]);
+
+// This code is working with json encode printing actual params with 
+// echo json_encode($v);
+// $v = json_decode($v);
+//  echo json_encode('{"fullname" : "'.$v['tagname'].'"}');
+//  // echo json_encode("{'fullname' : 'Jeff Hansen'}");
+// return;
+
 
 $headers = getallheaders();
-if(isset($headers["codetype"]) == "" || isset($headers["type"]) != "url-x" ){
+if((isset($headers["codetype"]) == "" || isset($headers["type"]) != "url-x" ) && false){
+// if( isset($headers["type"]) != "url-x" && false ){
 	//enter the code for security of db
-	echo "This is the security protocol activated for the security reasons";
+	$ab = '{"error": "This is the security protocol activated for the security reasons"}';
+	echo json_encode($_REQUEST);
+
 }else{
-	if(isset($_POST['tagname'])){
+	// echo $pstData['tagname'];
+	if(isset($pstData['tagname'])){
 		$db = new dbmodule();
-		switch ($_POST['tagname']) {
-			case 'showlinks':
+		switch ($pstData['tagname']) {
+			case "showlinks":
 			$db->getAllLinks();
+			break;
+			case "linksCount":
+			$db->totalLinksCount(); 
+			break;
+			case 'updatevote':
+			if( isset($pstData['voteid']) && isset($pstData['vote']) ){
+				$db->updatevote($pstData['vote'],$pstData['voteid']);
+			}
 			break;
 			case 'showdocuments':
 			$db->getAllDocs();
 			break;
 			case 'form-data':
-			if( isset($_POST['name']) && isset($_POST['link']) && isset($_POST['description']) && isset($_POST['type']) ){
-				$db->insert_data_form($_POST['name'],$_POST['link'],$_POST['description'],$_POST['type']);	
+			if( isset($pstData['name']) && isset($pstData['link']) && isset($pstData['description']) && isset($pstData['type']) ){
+				$db->insert_data_form($pstData['name'],$pstData['link'],$pstData['description'],$pstData['type']);	
 			}else{
 				echo "Not sure how do you get here but You need to leave now.";
 			}
-			
 			break;
 			case 'upload-form':
 			$db->insert_uploaded_doc();
