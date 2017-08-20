@@ -1,2 +1,3 @@
 ALTER TABLE `table1` ADD `vote` INT NULL DEFAULT '0' COMMENT 'ranking Links' AFTER `description`, ADD `time` DATETIME NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Added on' AFTER `vote`;
-
+ALTER TABLE `table2` ADD `vote` INT NULL DEFAULT '0' COMMENT 'ranking Links' AFTER `description`, ADD `time` DATETIME NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Added on' AFTER `vote`;
+CREATE TABLE `bookmarks`.`table3` ( `id` INT NULL AUTO_INCREMENT , `name` VARCHAR(50) NOT NULL , `description` VARCHAR(1000) NOT NULL , `filename` VARCHAR(255) NOT NULL , `time` DATETIME NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;

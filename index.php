@@ -18,10 +18,12 @@ require_once "dbmodule.php";
 
 
 header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Headers: Origin, Content-type, X-Auth-Token, Authorization');  
+header('Access-Control-Allow-Headers: Origin, Content-type, X-Auth-Token, Authorization,accept, x-requested-with');  
 header("Content-Type: application/json");
+header("Access-Control-Max-Age:1800");
 // header("Content-Type: application/x-www-form-urlencoded; charset=UTF-8");
 
+// $pstData = (array) json_decode($_FILES);
 
 $pstData = (array) json_decode($_POST["json"]);
 
@@ -46,10 +48,15 @@ if((isset($headers["codetype"]) == "" || isset($headers["type"]) != "url-x" ) &&
 		$db = new dbmodule();
 		switch ($pstData['tagname']) {
 			case "showlinks":
-			$db->getAllLinks();
+			if( isset($pstData['pageNumber']) ){
+				$db->getAllLinks($pstData['pageNumber']);
+			}
 			break;
 			case "linksCount":
 			$db->totalLinksCount(); 
+			break;
+			case "docsCount":
+			$db->totalDocsCount(); 
 			break;
 			case 'updatevote':
 			if( isset($pstData['voteid']) && isset($pstData['vote']) ){
@@ -57,7 +64,9 @@ if((isset($headers["codetype"]) == "" || isset($headers["type"]) != "url-x" ) &&
 			}
 			break;
 			case 'showdocuments':
-			$db->getAllDocs();
+			if( isset($pstData['pageNumber']) ){
+				$db->getAllDocs($pstData['pageNumber']);
+			}
 			break;
 			case 'form-data':
 			if( isset($pstData['name']) && isset($pstData['link']) && isset($pstData['description']) && isset($pstData['type']) ){
@@ -66,15 +75,18 @@ if((isset($headers["codetype"]) == "" || isset($headers["type"]) != "url-x" ) &&
 				echo "Not sure how do you get here but You need to leave now.";
 			}
 			break;
-			case 'upload-form':
-			$db->insert_uploaded_doc();
+			case 'upload-file':
+			
+			$db->insert_uploaded_doc($_FILES['file'],$pstData["name"],$pstData["description"]);
 			break;
 			default:
-			echo "trying to be very smart. cheat'in huh.........";
+			$result["error"] = "trying to be very smart. cheat'in huh.........1";
+			echo json_encode($result);
 			break;
 		}
 	}else{
-		echo "trying to be very smart. cheat'in huh.........";
+		$result["error"] = "trying to be very smart. cheat'in huh.........2";
+		echo json_encode($result);
 	}
 }
 
